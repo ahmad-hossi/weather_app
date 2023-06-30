@@ -1,10 +1,5 @@
 class ServerException implements Exception{}
 
-class NotAuthorisedException implements Exception{}
+class UnauthorizedException implements Exception{}
 
-class NotAuthenticatedException implements Exception{}
-
-class AlreadyExistException implements Exception{}
-
-class InvoiceNotPaidException implements Exception{}
-
+class WrongLonOrLatException implements Exception{}

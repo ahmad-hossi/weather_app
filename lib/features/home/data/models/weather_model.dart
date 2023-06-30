@@ -1,4 +1,6 @@
-class WeatherModel {
+import 'package:weather_app/features/home/domain/entities/weather.dart';
+
+class WeatherModel extends Weather {
   String status;
   String description;
   double temp;
@@ -19,7 +21,16 @@ class WeatherModel {
     required this.pressure,
     required this.humidity,
     required this.windSpeed,
-  });
+  }) : super(
+            status: status,
+            description: description,
+            temp: temp,
+            tempMin: tempMin,
+            tempMax: tempMax,
+            feelsLike: feelsLike,
+            pressure: pressure,
+            humidity: humidity,
+            windSpeed: windSpeed);
 
   factory WeatherModel.fromJson(Map<String, dynamic> json) => WeatherModel(
         status: json['weather'][0]['main'],
@@ -32,4 +43,12 @@ class WeatherModel {
         humidity: (json['main']['humidity'] as num).toDouble(),
         windSpeed: (json['wind']['speed'] as num).toDouble(),
       );
+
+  @override
+  String toString() {
+    return 'WeatherModel{status: $status, description: $description, '
+        'temp: $temp, tempMin: $tempMin, tempMax: $tempMax, '
+        'feelsLike: $feelsLike, pressure: $pressure, humidity: $humidity,'
+        'windSpeed: $windSpeed}';
+  }
 }

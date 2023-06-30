@@ -11,10 +11,8 @@ class Failure extends Equatable {
 enum ErrorType {
   serverError,
   notAuthorisedError,
-  alreadyExistError,
-  notAuthenticatedError,
   internetConnection,
-  retrievePaymentError,
+  wrongInformationError,
 }
 
 String getErrorMessage(ErrorType errorType) {
@@ -22,15 +20,11 @@ String getErrorMessage(ErrorType errorType) {
     case ErrorType.serverError:
       return 'server error';
     case ErrorType.notAuthorisedError:
-      return 'wrong user name or password';
-    case ErrorType.notAuthenticatedError:
-      return 'please sign in or signup';
-    case ErrorType.alreadyExistError:
-      return 'user name is already exist';
+      return 'check app key';
+    case ErrorType.wrongInformationError:
+      return 'wrongInformationError';
     case ErrorType.internetConnection:
       return 'check your internet connection';
-    case ErrorType.retrievePaymentError:
-      return 'failed to retrieve payment information';
     default:
       return 'something went wrong';
   }
