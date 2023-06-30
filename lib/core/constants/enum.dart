@@ -1,4 +1,4 @@
 enum RequestStatus{successful , failed}
 
-enum LocationFailureType { serviceLocationNotEnable, denied, deniedForever, distanceCalcError }
+enum LocationFailureType { serviceLocationNotEnable, denied, deniedForever }
 
