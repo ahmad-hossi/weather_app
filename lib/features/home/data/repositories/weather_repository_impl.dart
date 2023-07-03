@@ -48,11 +48,6 @@ class WeatherRepositoryImpl implements WeatherRepository {
     }
   }
 
-  @override
-  Future<Either<Failure, List<Weather>>> get5DaysWeather(String requestParams) {
-    // TODO: implement get5DaysWeather
-    throw UnimplementedError();
-  }
 
   @override
   Future<Either<Failure, LocationEntity>> getCityLocation(String requestParams) async {

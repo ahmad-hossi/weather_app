@@ -1,6 +1,4 @@
 import 'dart:convert';
-import 'package:location/location.dart';
-
 import '../../../../core/constants/app_constant.dart';
 import '../../../../core/error/exceptions.dart';
 import '../models/location_model.dart';
