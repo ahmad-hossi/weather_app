@@ -46,9 +46,6 @@ class WeatherModel extends Weather {
 
   @override
   String toString() {
-    return 'WeatherModel{status: $status, description: $description, '
-        'temp: $temp, tempMin: $tempMin, tempMax: $tempMax, '
-        'feelsLike: $feelsLike, pressure: $pressure, humidity: $humidity,'
-        'windSpeed: $windSpeed}';
+    return 'WeatherModel{status: $status, description: $description, temp: $temp, tempMin: $tempMin, tempMax: $tempMax, feelsLike: $feelsLike, pressure: $pressure, humidity: $humidity, windSpeed: $windSpeed}';
   }
 }

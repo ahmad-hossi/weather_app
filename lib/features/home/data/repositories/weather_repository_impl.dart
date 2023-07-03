@@ -20,9 +20,27 @@ class WeatherRepositoryImpl implements WeatherRepository {
         return Right(await _remoteDataSource.getCurrentWeather(requestParams));
       } on ServerException {
         return const Left(Failure(errorType: ErrorType.serverError));
-      } on UnauthorizedException{
+      } on UnauthorizedException {
         return const Left(Failure(errorType: ErrorType.notAuthorisedError));
-      } on WrongLonOrLatException{
+      } on WrongLonOrLatException {
+        return const Left(Failure(errorType: ErrorType.wrongInformationError));
+      }
+    } else {
+      return const Left(Failure(errorType: ErrorType.internetConnection));
+    }
+  }
+
+  @override
+  Future<Either<Failure, List<Weather>>> get5DaysWeather(
+      String requestParams) async {
+    if (await _networkInfo.isConnected) {
+      try {
+        return Right(await _remoteDataSource.get5DaysWeather(requestParams));
+      } on ServerException {
+        return const Left(Failure(errorType: ErrorType.serverError));
+      } on UnauthorizedException {
+        return const Left(Failure(errorType: ErrorType.notAuthorisedError));
+      } on WrongLonOrLatException {
         return const Left(Failure(errorType: ErrorType.wrongInformationError));
       }
     } else {

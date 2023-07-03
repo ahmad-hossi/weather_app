@@ -41,7 +41,7 @@ void main() {
     ),
   ];
 
-  test('should get current weather for specific location from the repository',
+  test('should get 5 days forecast weather for specific location from the repository',
           () async {
         //Arrange
         when(mockWeatherRepository.get5DaysWeather(testParams.toRequestParams()))
