@@ -8,7 +8,6 @@ abstract class AppLocation {
 
 class AppLocationImpl implements AppLocation {
   final Location _location;
-
   AppLocationImpl(this._location);
 
   @override

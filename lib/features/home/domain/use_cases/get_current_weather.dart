@@ -6,11 +6,11 @@ import 'package:weather_app/features/home/domain/repositories/weather_repository
 import '../../../../core/use_cases/use_case.dart';
 
 class GetCurrentWeather extends UseCase<Weather, GetWeatherParams> {
-  final WeatherRepository _repository;
-  GetCurrentWeather(this._repository);
+  final WeatherRepository repository;
+  GetCurrentWeather(this.repository);
 
   @override
   Future<Either<Failure, Weather>> call(GetWeatherParams params) async {
-    return _repository.getCurrentWeather(params.toRequestParams());
+    return await repository.getCurrentWeather(params.toRequestParams());
   }
 }

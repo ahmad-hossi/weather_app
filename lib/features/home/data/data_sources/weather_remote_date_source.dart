@@ -24,6 +24,7 @@ class WeatherRemoteDataSourceImpl implements WeatherRemoteDataSource {
           'Content-Type': 'application/json',
         },
       );
+      print(response.body);
       if (response.statusCode == 200) {
         final responseData = json.decode(response.body);
         return WeatherModel.fromJson(responseData);

@@ -4,7 +4,6 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:weather_app/features/home/presentation/bloc/location_bloc/location_bloc.dart';
 import 'package:weather_app/features/home/presentation/bloc/weather_bloc/weather_bloc.dart';
 import 'package:weather_app/features/home/presentation/pages/home_page.dart';
-
 import 'injection_container.dart';
 
 class App extends StatelessWidget {

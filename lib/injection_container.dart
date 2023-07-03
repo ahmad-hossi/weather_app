@@ -1,5 +1,7 @@
 import 'package:get_it/get_it.dart';
 import 'package:http/http.dart' as http;
+import 'package:internet_connection_checker/internet_connection_checker.dart';
+import 'package:location/location.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:weather_app/features/home/data/data_sources/weather_remote_date_source.dart';
 import 'package:weather_app/features/home/domain/repositories/weather_repository.dart';
@@ -35,13 +37,15 @@ Future<void> init() async {
 
   //region core
   sl.registerLazySingleton<NetworkInfo>(() => NetworkInfoImpl(sl()));
+  sl.registerLazySingleton<AppLocation>(() => AppLocationImpl(sl()));
 
   //endregion
 
   // External
   sl.registerLazySingleton(() => http.Client());
-  sl.registerLazySingleton<AppLocation>(() => AppLocationImpl(sl()));
-  //sl.registerSingleton(() => SharedPreferences.getInstance());
+  sl.registerLazySingleton(() => Location());
+  sl.registerLazySingleton(() => InternetConnectionChecker());
+
   SharedPreferences sharedPref = await SharedPreferences.getInstance();
   sl.registerSingleton<SharedPreferences>(sharedPref);
 }

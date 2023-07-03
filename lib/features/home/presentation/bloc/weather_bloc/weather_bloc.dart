@@ -12,7 +12,10 @@ class WeatherBloc extends Bloc<WeatherEvent, WeatherState> {
   final GetCurrentWeather _getCurrentWeather;
 
   WeatherBloc(this._getCurrentWeather) : super(WeatherInitial()) {
-    on<GetCurrentWeatherEvent>((event, emit) {
+    on<GetCurrentWeatherEvent>((event, emit) async {
+      final eitherResponse = await _getCurrentWeather(
+          GetWeatherParams(lon: event.lon, lat: event.lat));
+      print(eitherResponse);
     });
   }
 }

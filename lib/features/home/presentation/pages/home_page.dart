@@ -6,6 +6,8 @@ import 'package:lottie/lottie.dart';
 import 'package:weather_app/core/extinsions/date_time_extension.dart';
 import 'package:weather_app/features/home/presentation/bloc/location_bloc/location_bloc.dart';
 
+import '../bloc/weather_bloc/weather_bloc.dart';
+
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
 
@@ -17,9 +19,11 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     context.read<LocationBloc>().add(GetCurrentLocation());
+    context
+        .read<WeatherBloc>()
+        .add(GetCurrentWeatherEvent(lon: -37.933, lat: 40.6995));
     super.initState();
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -37,7 +41,8 @@ class _HomePageState extends State<HomePage> {
             actions: [
               TextButton(onPressed: () {}, child: const Icon(Icons.add)),
             ],
-            leading: TextButton(onPressed: () {}, child: const Icon(Icons.menu)),
+            leading:
+                TextButton(onPressed: () {}, child: const Icon(Icons.menu)),
             flexibleSpace: FlexibleSpaceBar(
               centerTitle: true,
               background: Image.network(
@@ -147,9 +152,7 @@ class HourlyForecastWidget extends StatelessWidget {
           ),
           Text(
             '35°',
-            style: TextStyle(
-                fontSize: 12.sp,
-                fontWeight: FontWeight.normal),
+            style: TextStyle(fontSize: 12.sp, fontWeight: FontWeight.normal),
           ),
           Row(
             children: [
