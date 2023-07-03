@@ -4,6 +4,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:weather_app/features/home/presentation/bloc/location_bloc/location_bloc.dart';
 import 'package:weather_app/features/home/presentation/bloc/weather_bloc/weather_bloc.dart';
 import 'package:weather_app/features/home/presentation/pages/home_page.dart';
+import 'features/home/presentation/bloc/city_bloc/city_bloc.dart';
 import 'injection_container.dart';
 
 class App extends StatelessWidget {
@@ -17,8 +18,11 @@ class App extends StatelessWidget {
         providers: [
           BlocProvider<LocationBloc>(create: (_) => sl<LocationBloc>()),
           BlocProvider<WeatherBloc>(create: (_) => sl<WeatherBloc>()),
+          BlocProvider<CityBloc>(create: (_) => sl<CityBloc>()),
         ],
-        child: MaterialApp(home: child),
+        child: MaterialApp(
+            debugShowCheckedModeBanner: false,
+            home: child),
       ),
       child: HomePage(),
     );

@@ -13,6 +13,7 @@ enum ErrorType {
   notAuthorisedError,
   internetConnection,
   wrongInformationError,
+  emptyParamsError,
 }
 
 String getErrorMessage(ErrorType errorType) {
@@ -22,7 +23,9 @@ String getErrorMessage(ErrorType errorType) {
     case ErrorType.notAuthorisedError:
       return 'check app key';
     case ErrorType.wrongInformationError:
-      return 'wrongInformationError';
+      return 'wrong Information Error';
+    case ErrorType.emptyParamsError:
+      return 'Nothing to geocode';
     case ErrorType.internetConnection:
       return 'check your internet connection';
     default:

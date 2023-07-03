@@ -5,7 +5,9 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:lottie/lottie.dart';
 import 'package:weather_app/core/extinsions/date_time_extension.dart';
 import 'package:weather_app/features/home/presentation/bloc/location_bloc/location_bloc.dart';
+import 'package:weather_app/features/home/presentation/pages/city_page.dart';
 
+import '../bloc/city_bloc/city_bloc.dart';
 import '../bloc/weather_bloc/weather_bloc.dart';
 
 class HomePage extends StatefulWidget {
@@ -39,7 +41,9 @@ class _HomePageState extends State<HomePage> {
             pinned: true,
             title: const Text('Aleppo'),
             actions: [
-              TextButton(onPressed: () {}, child: const Icon(Icons.add)),
+              TextButton(onPressed: () {
+                Navigator.push(context, MaterialPageRoute(builder: (context) => CityPage(),));
+              }, child: const Icon(Icons.add)),
             ],
             leading:
                 TextButton(onPressed: () {}, child: const Icon(Icons.menu)),

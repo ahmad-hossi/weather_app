@@ -1,5 +1,6 @@
 import 'package:dartz/dartz.dart';
 import 'package:weather_app/core/error/failures.dart';
+import 'package:weather_app/features/home/domain/entities/location_entity.dart';
 import 'package:weather_app/features/home/domain/entities/weather.dart';
 import 'package:weather_app/features/home/domain/repositories/weather_repository.dart';
 import '../../../../core/error/exceptions.dart';
@@ -26,6 +27,29 @@ class WeatherRepositoryImpl implements WeatherRepository {
       }
     } else {
       return const Left(Failure(errorType: ErrorType.internetConnection));
+    }
+  }
+
+  @override
+  Future<Either<Failure, List<Weather>>> get5DaysWeather(String requestParams) {
+    // TODO: implement get5DaysWeather
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<Either<Failure, LocationEntity>> getCityLocation(String requestParams) async {
+    if (await _networkInfo.isConnected) {
+      try {
+        return Right(await _remoteDataSource.getCityLocationByName(requestParams));
+    } on ServerException {
+    return const Left(Failure(errorType: ErrorType.serverError));
+    } on NothingToGeocodeException{
+        return const Left(Failure(errorType: ErrorType.wrongInformationError));
+      } on UnauthorizedException{
+    return const Left(Failure(errorType: ErrorType.notAuthorisedError));
+    }
+    } else {
+    return const Left(Failure(errorType: ErrorType.internetConnection));
     }
   }
 }
