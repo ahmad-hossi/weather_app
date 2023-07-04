@@ -23,7 +23,6 @@ class ForecastBloc extends Bloc<ForecastEvent, ForecastState> {
     emit(ForecastLoading());
     final eitherResponse = await _get5daysWeather(
         GetWeatherParams(lon: event.lon, lat: event.lat));
-    print(eitherResponse);
     emit(eitherResponse.fold(
             (failure) =>
             ForecastFailed(errorMessage: getErrorMessage(failure.errorType)),

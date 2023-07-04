@@ -28,7 +28,6 @@ class WeatherRemoteDataSourceImpl implements WeatherRemoteDataSource {
           'Content-Type': 'application/json',
         },
       );
-      print(response.body);
       if (response.statusCode == 200) {
         final responseData = json.decode(response.body);
         return WeatherModel.fromJson(responseData);
@@ -56,7 +55,6 @@ class WeatherRemoteDataSourceImpl implements WeatherRemoteDataSource {
           'Content-Type': 'application/json',
         },
       );
-      print(response.body);
       if (response.statusCode == 200) {
         final responseData = json.decode(response.body);
         return LocationModel.fromJson(responseData[0]);
@@ -85,7 +83,6 @@ class WeatherRemoteDataSourceImpl implements WeatherRemoteDataSource {
           'Content-Type': 'application/json',
         },
       );
-      print(response.body);
       if (response.statusCode == 200) {
         final responseData = json.decode(response.body);
         return (responseData['list'] as List<dynamic>)

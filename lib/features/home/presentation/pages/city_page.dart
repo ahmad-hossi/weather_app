@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:weather_app/core/utils/show_toast.dart';
-import 'package:weather_app/features/home/domain/use_cases/get_5days_weather.dart';
 import 'package:weather_app/features/home/presentation/bloc/city_bloc/city_bloc.dart';
 import 'package:weather_app/features/home/presentation/bloc/forcast_bloc/forecast_bloc.dart';
 import 'package:weather_app/features/home/presentation/bloc/weather_bloc/weather_bloc.dart';
@@ -88,6 +87,7 @@ class SearchResult extends StatelessWidget {
               lat: cityData.lat,
               lon: cityData.lon,
             ));
+        Navigator.pop(context);
       },
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,

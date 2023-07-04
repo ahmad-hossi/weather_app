@@ -15,7 +15,6 @@ class LocationBloc extends Bloc<LocationEvent, LocationState> {
 
   LocationBloc(this._appLocation) : super(LocationInitial()) {
     on<GetCurrentLocation>((event, emit) async {
-      emit(LocationLoading());
       final eitherResponse = await _appLocation.getCurrentLocation();
       eitherResponse.fold((failure) {
         if (failure == LocationFailureType.serviceLocationNotEnable) {

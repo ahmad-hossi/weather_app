@@ -28,7 +28,6 @@ class CityBloc extends Bloc<CityEvent, CityState> {
     emit(CityLoading());
     final eitherResponse =
         await getCityLocation(GetCityLocationParams(cityName: event.cityName));
-    print(eitherResponse);
     emit(eitherResponse.fold(
         (failure) => CityLocationDetermineFailed(
           errorMessage: getErrorMessage(failure.errorType)

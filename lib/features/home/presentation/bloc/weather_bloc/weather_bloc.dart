@@ -22,7 +22,6 @@ class WeatherBloc extends Bloc<WeatherEvent, WeatherState> {
   Future<void> _onGetCurrentWeather(
       GetCurrentWeatherEvent event, Emitter<WeatherState> emit) async {
     if (event.lon == null && lon == null || event.lat == null && lat == null) {
-      print('hi null');
       return;
     }
     emit(WeatherLoading());
@@ -34,7 +33,6 @@ class WeatherBloc extends Bloc<WeatherEvent, WeatherState> {
         (weather) {
       lat = event.lat ?? lat;
       lon = event.lon ?? lon;
-      print('lat  $lat');
       return WeatherLoaded(weather: weather);
     }));
   }

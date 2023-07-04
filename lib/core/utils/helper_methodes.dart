@@ -4,6 +4,7 @@ import 'package:lottie/lottie.dart';
 import 'package:stream_transform/stream_transform.dart';
 import 'package:bloc_concurrency/bloc_concurrency.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:weather_app/core/constants/app_icons.dart';
 
 import '../constants/enum.dart';
 
@@ -22,13 +23,35 @@ Widget getWeatherIcon(String weatherState, IconType type,
     case 'Clear':
       iconPath = static
           ? type == IconType.day
-              ? 'assets/icons/sunny.svg'
-              : 'assets/icons/cloudy.svg'
-          : type == IconType.night
-              ? 'assets/animation_files/sunny.json'
-              : 'assets/animation_files/sunny.json';
+              ? AppIcons.sunny
+              : AppIcons.clearNight
+          : type == IconType.day
+              ? AppIcons.sunnyAnimated
+              : AppIcons.clearNightAnimated;
     case 'Clouds':
+      iconPath = static
+          ? type == IconType.day
+          ? AppIcons.cloudy
+          : AppIcons.cloudy
+          : type == IconType.day
+          ? AppIcons.cloudyDayAnimated
+          : AppIcons.cloudyNightAnimated;
     case 'Rain':
+      iconPath = static
+          ? type == IconType.day
+          ? AppIcons.rainy
+          : AppIcons.rainy
+          : type == IconType.day
+          ? AppIcons.rainyDayAnimated
+          : AppIcons.rainyNightAnimated;
+    case 'Snow':
+      iconPath = static
+          ? type == IconType.day
+          ? AppIcons.snowy
+          : AppIcons.snowy
+          : type == IconType.day
+          ? AppIcons.snowyDayAnimated
+          : AppIcons.snowyNightAnimated;
     default:
   }
   return static ? SvgPicture.asset(iconPath) : Lottie.asset(iconPath);
