@@ -1,12 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:lottie/lottie.dart';
+import 'package:flutter_svg/svg.dart';
+import 'package:weather_app/core/constants/enum.dart';
 import 'package:weather_app/core/extinsions/date_time_extension.dart';
 import 'package:weather_app/core/extinsions/double_extension.dart';
+import 'package:weather_app/core/utils/show_toast.dart';
 import 'package:weather_app/features/home/presentation/bloc/location_bloc/location_bloc.dart';
 import 'package:app_settings/app_settings.dart';
 import '../../../../core/utils/helper_methodes.dart';
+import '../../../../core/widgets/loading_widget.dart';
 import '../bloc/forcast_bloc/forecast_bloc.dart';
 import '../bloc/weather_bloc/weather_bloc.dart';
 
@@ -21,9 +24,6 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     context.read<LocationBloc>().add(GetCurrentLocation());
-    // context.read<WeatherBloc>()
-    //   ..add(GetCurrentWeatherEvent(lon: -37.933, lat: 40.6995))
-    //   ..add(Get5DaysWeatherEvent(lon: -37.933, lat: 40.6995));
     super.initState();
   }
 
@@ -42,14 +42,26 @@ class _HomePageState extends State<HomePage> {
               context.read<ForecastBloc>().add(GetWeatherForecast(
                   lon: double.parse(state.locationData.longitude.toString()),
                   lat: double.parse(state.locationData.latitude.toString())));
-            } else if (state is LocationAccessDenied ||
-                state is LocationAccessDeniedForever) {
-              // showDialog(
-              //     context: context,
-              //     builder: (_) => AlertDialog(
-              //           title: Text('Weather app need Location permission'),
-              //           actions: [],
-              //         ));
+            }
+          }),
+          BlocListener<WeatherBloc, WeatherState>(listener: (ctx, state) {
+            if (state is WeatherLoading) {
+              showLoadingDialog(context);
+            }else if(state is WeatherLoaded){
+              Navigator.pop(ctx);
+            }else if(state is WeatherFailed){
+              Navigator.pop(ctx);
+              showToastMessage(state.errorMessage);
+            }
+          }),
+          BlocListener<ForecastBloc, ForecastState>(listener: (ctx, state) {
+            if (state is ForecastLoading) {
+              showLoadingDialog(context);
+            }else if(state is ForecastLoaded){
+              Navigator.pop(ctx);
+            }else if(state is ForecastFailed){
+              Navigator.pop(ctx);
+              showToastMessage(state.errorMessage);
             }
           }),
         ],
@@ -101,18 +113,18 @@ class _HomePageState extends State<HomePage> {
                   return Center(
                     child: Container(
                       color: Colors.red,
-                      child: TextButton(
-                        onPressed: () {
-                          AppSettings.openAppSettings();
-                        },
+                      child: const TextButton(
+                        onPressed: AppSettings.openAppSettings,
                         child: Text('enable location permession'),
                       ),
                     ),
                   );
-                } else
-                  return SizedBox.shrink();
+                } else {
+                  return const SizedBox.shrink();
+                }
               }),
               BlocBuilder<WeatherBloc, WeatherState>(
+                buildWhen: (prev, curr) => curr is WeatherLoaded,
                 builder: (context, weatherState) {
                   if (weatherState is WeatherLoaded) {
                     return Container(
@@ -125,49 +137,53 @@ class _HomePageState extends State<HomePage> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          CityNameWidget(
-                              cityName: weatherState.weather.cityName),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              CityNameWidget(
+                                  cityName: weatherState.weather.cityName),
+                              InkWell(
+                                onTap: () {
+                                  context
+                                      .read<WeatherBloc>()
+                                      .add(GetCurrentWeatherEvent());
+                                },
+                                child: Container(
+                                  child: Icon(Icons.refresh),
+                                ),
+                              )
+                            ],
+                          ),
                           DateTimeWidget(dateTime: DateTime.now()),
                           SizedBox(
                             height: 8.h,
                           ),
                           TemperatureWidget(
+                            description: weatherState.weather.description,
                             temp: weatherState.weather.temp,
                             feelTemp: weatherState.weather.feelsLike,
                             minTemp: weatherState.weather.tempMin,
                             maxTemp: weatherState.weather.tempMax,
                           ),
-                          // SizedBox(
-                          //   height: 8.h,
-                          // ),
-                          // Row(children: [
-                          //   Container(
-                          //     child: Column(
-                          //       children: [
-                          //         SvgPicture.asset(
-                          //           'assets/icons/wind.svg',
-                          //           width: 28,
-                          //           height: 28,
-                          //         ),
-                          //         Text(weatherState.weather.humidity
-                          //             .toString()),
-                          //       ],
-                          //     ),
-                          //   ),
-                          //   Text(weatherState.weather.status),
-                          //   Text(weatherState.weather.description),
-                          //   Text(weatherState.weather.humidity.toString()),
-                          //   Text(weatherState.weather.pressure.toString()),
-                          // ])
+                          SizedBox(
+                            height: 16.h,
+                          ),
+                          WeatherWindWidget(
+                              windSpeed: weatherState.weather.windSpeed),
+                          const Divider(),
+                          WeatherHumidityWidget(
+                            humidity: weatherState.weather.humidity,
+                          )
                         ],
                       ),
                     );
                   } else {
-                    return Center(child: SizedBox.shrink());
+                    return const Center(child: SizedBox.shrink());
                   }
                 },
               ),
               BlocBuilder<ForecastBloc, ForecastState>(
+                buildWhen: (prev, curr) => curr is ForecastLoaded,
                 builder: (context, state) {
                   if (state is ForecastLoaded) {
                     return Container(
@@ -244,6 +260,59 @@ class _HomePageState extends State<HomePage> {
       ),
     );
   }
+
+}
+
+class WeatherHumidityWidget extends StatelessWidget {
+  const WeatherHumidityWidget({
+    required this.humidity,
+    super.key,
+  });
+
+  final double humidity;
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(children: [
+      SvgPicture.asset(
+        'assets/icons/wind.svg',
+        width: 28,
+        height: 28,
+      ),
+      SizedBox(
+        width: 8.w,
+      ),
+      const Text('Humidity'),
+      const Spacer(),
+      Text('${humidity} %'),
+    ]);
+  }
+}
+
+class WeatherWindWidget extends StatelessWidget {
+  const WeatherWindWidget({
+    required this.windSpeed,
+    super.key,
+  });
+
+  final double windSpeed;
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(children: [
+      SvgPicture.asset(
+        'assets/icons/wind.svg',
+        width: 28,
+        height: 28,
+      ),
+      SizedBox(
+        width: 8.w,
+      ),
+      const Text('Wind'),
+      const Spacer(),
+      Text('$windSpeed km/h'),
+    ]);
+  }
 }
 
 class WeatherDayCardWidget extends StatelessWidget {
@@ -276,8 +345,8 @@ class WeatherDayCardWidget extends StatelessWidget {
             flex: 4,
             child: Row(
               children: [
-                getWeatherIcon(dayState),
-                getWeatherIcon(nightState),
+                getWeatherIcon(dayState, IconType.day),
+                getWeatherIcon(nightState, IconType.night),
               ],
             ),
           ),
@@ -343,6 +412,7 @@ class WeatherDayCardWidget extends StatelessWidget {
 
 class TemperatureWidget extends StatelessWidget {
   const TemperatureWidget({
+    required this.description,
     required this.temp,
     required this.minTemp,
     required this.maxTemp,
@@ -350,6 +420,7 @@ class TemperatureWidget extends StatelessWidget {
     super.key,
   });
 
+  final String description;
   final double temp;
   final double minTemp;
   final double maxTemp;
@@ -366,7 +437,7 @@ class TemperatureWidget extends StatelessWidget {
               width: 50.w,
               height: 50.w,
               child: Center(
-                child: Lottie.asset('assets/animation_files/sunny.json'),
+                child: getWeatherIcon('Clear', IconType.day, static: false),
               ),
             ),
             Text(
@@ -375,12 +446,12 @@ class TemperatureWidget extends StatelessWidget {
             ),
           ],
         ),
-        const Column(
+        Column(
           crossAxisAlignment: CrossAxisAlignment.end,
           children: [
-            Text('clear sky'),
-            Text('35°/17°'),
-            Text('Feels like 35°')
+            Text(description),
+            Text('${minTemp.toCelsius}/${maxTemp.toCelsius}'),
+            Text('Feels like ${feelTemp.toCelsius}')
           ],
         )
       ],

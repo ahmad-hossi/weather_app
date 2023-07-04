@@ -1,8 +1,11 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:lottie/lottie.dart';
 import 'package:stream_transform/stream_transform.dart';
 import 'package:bloc_concurrency/bloc_concurrency.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+
+import '../constants/enum.dart';
 
 const throttleDuration = Duration(milliseconds: 1000);
 
@@ -12,17 +15,23 @@ EventTransformer<E> throttleDroppable<E>(Duration duration) {
   };
 }
 
-Widget getWeatherIcon(String weatherState) {
+Widget getWeatherIcon(String weatherState, IconType type,
+    {bool static = true}) {
+  String iconPath = '';
   switch (weatherState) {
     case 'Clear':
-      return SvgPicture.asset('assets/icons/sunny.svg');
+      iconPath = static
+          ? type == IconType.day
+              ? 'assets/icons/sunny.svg'
+              : 'assets/icons/cloudy.svg'
+          : type == IconType.night
+              ? 'assets/animation_files/sunny.json'
+              : 'assets/animation_files/sunny.json';
     case 'Clouds':
-      return SvgPicture.asset('assets/icons/cloudy.svg');
     case 'Rain':
-      return SvgPicture.asset('assets/icons/rain.svg');
     default:
-      return SvgPicture.asset('assets/icons/default.svg');
   }
+  return static ? SvgPicture.asset(iconPath) : Lottie.asset(iconPath);
 }
 
 String getDayName(DateTime dateTime) {

@@ -21,16 +21,20 @@ class WeatherBloc extends Bloc<WeatherEvent, WeatherState> {
   }
   Future<void> _onGetCurrentWeather(
       GetCurrentWeatherEvent event, Emitter<WeatherState> emit) async {
+    if (event.lon == null && lon == null || event.lat == null && lat == null) {
+      print('hi null');
+      return;
+    }
     emit(WeatherLoading());
     final eitherResponse = await _getCurrentWeather(
-        GetWeatherParams(lon: event.lon, lat: event.lat));
-    print(eitherResponse);
+        GetWeatherParams(lon: event.lon ?? lat!, lat: event.lat ?? lon!));
     emit(eitherResponse.fold(
         (failure) =>
             WeatherFailed(errorMessage: getErrorMessage(failure.errorType)),
         (weather) {
-      lat = event.lat;
-      lon = event.lon;
+      lat = event.lat ?? lat;
+      lon = event.lon ?? lon;
+      print('lat  $lat');
       return WeatherLoaded(weather: weather);
     }));
   }

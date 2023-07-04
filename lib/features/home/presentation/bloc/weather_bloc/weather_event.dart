@@ -4,11 +4,11 @@ part of 'weather_bloc.dart';
 abstract class WeatherEvent {}
 
 class GetCurrentWeatherEvent extends WeatherEvent {
-  final double lon;
-  final double lat;
+  final double? lon;
+  final double? lat;
 
   GetCurrentWeatherEvent({
-    required this.lon,
-    required this.lat,
+     this.lon,
+     this.lat,
   });
 }
