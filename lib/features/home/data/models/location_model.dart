@@ -5,14 +5,14 @@ class LocationModel extends LocationEntity {
   final double lon;
   final String country;
   final String cityName;
-  final String state;
+  final String? state;
 
   LocationModel(
       {required this.lat,
       required this.lon,
       required this.country,
       required this.cityName,
-      required this.state})
+       this.state})
       : super(lat: lat, lon: lon, country: country, cityName: cityName,state: state);
 
   factory LocationModel.fromJson(Map<String, dynamic> json) => LocationModel(

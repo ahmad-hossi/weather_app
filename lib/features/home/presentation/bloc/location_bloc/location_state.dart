@@ -5,6 +5,8 @@ abstract class LocationState {}
 
 class LocationInitial extends LocationState {}
 
+class LocationLoading extends LocationState {}
+
 class LocationAccessDenied extends LocationState {}
 
 class LocationAccessDeniedForever extends LocationState {}

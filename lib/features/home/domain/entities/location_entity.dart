@@ -3,9 +3,12 @@ class LocationEntity {
   final double lon;
   final String country;
   final String cityName;
-  final String state;
+  final String? state;
 
-  LocationEntity({required this.lat, required this.lon, required this.country,required this.cityName,required this.state});
-
-
+  LocationEntity(
+      {required this.lat,
+      required this.lon,
+      required this.country,
+      required this.cityName,
+      required this.state});
 }

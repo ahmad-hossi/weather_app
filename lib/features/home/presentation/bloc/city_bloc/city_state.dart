@@ -6,8 +6,14 @@ abstract class CityState {}
 class CityInitial extends CityState {}
 class CityLoading extends CityState {}
 class CityLocationDeterminedSuccessfully extends CityState {
-  LocationEntity cityLocation;
+  LocationEntity cityData;
 
-  CityLocationDeterminedSuccessfully({required this.cityLocation});
+  CityLocationDeterminedSuccessfully({required this.cityData});
 }
-class CityLocationDetermineFailed extends CityState {}
+class CityLocationDetermineFailed extends CityState {
+  final String errorMessage;
+
+  CityLocationDetermineFailed({
+    required this.errorMessage,
+  });
+}

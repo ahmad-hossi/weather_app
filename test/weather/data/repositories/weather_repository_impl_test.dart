@@ -15,9 +15,9 @@ import 'weather_repository_impl_test.mocks.dart';
 
 @GenerateMocks([NetworkInfo, WeatherRemoteDataSource])
 void main() {
-  late  WeatherRepositoryImpl repository;
-  late  MockNetworkInfo mockNetworkInfo;
-  late  MockWeatherRemoteDataSource mockRemoteDataSource;
+  late WeatherRepositoryImpl repository;
+  late MockNetworkInfo mockNetworkInfo;
+  late MockWeatherRemoteDataSource mockRemoteDataSource;
 
   setUp(() {
     mockNetworkInfo = MockNetworkInfo();
@@ -36,6 +36,8 @@ void main() {
     pressure: 1009,
     humidity: 88,
     windSpeed: 3.98,
+    dateTime: DateTime.now(),
+    cityName: 'Aleppo',
   );
   final Weather testWeather = testWeatherModel;
   final testWeatherModelList = [
@@ -49,6 +51,8 @@ void main() {
       pressure: 1009,
       humidity: 88,
       windSpeed: 3.98,
+      dateTime: DateTime.now(),
+      cityName: 'Aleppo',
     )
   ];
   final List<Weather> testWeatherList = testWeatherModelList;
@@ -136,7 +140,6 @@ void main() {
   });
 
   group('get 5 days weather weather', () {
-
     runTestsOnline(() {
       test(
         'should return remote data when the call to remote data source is successful',
@@ -159,8 +162,7 @@ void main() {
           'should return server error when the server throws a ServerException',
           () async {
         // Arrange
-        when(mockRemoteDataSource
-                .get5DaysWeather(testParams.toRequestParams()))
+        when(mockRemoteDataSource.get5DaysWeather(testParams.toRequestParams()))
             .thenThrow(ServerException());
 
         // Act
@@ -169,8 +171,8 @@ void main() {
 
         // Assert
         expect(result, const Left(Failure(errorType: ErrorType.serverError)));
-        verify(mockRemoteDataSource
-            .get5DaysWeather(testParams.toRequestParams()));
+        verify(
+            mockRemoteDataSource.get5DaysWeather(testParams.toRequestParams()));
         verifyNoMoreInteractions(mockRemoteDataSource);
       });
 
@@ -178,8 +180,7 @@ void main() {
           'should return not authorized error when the server returns 401 status code',
           () async {
         // Arrange
-        when(mockRemoteDataSource
-                .get5DaysWeather(testParams.toRequestParams()))
+        when(mockRemoteDataSource.get5DaysWeather(testParams.toRequestParams()))
             .thenThrow(UnauthorizedException());
 
         // Act
@@ -189,8 +190,8 @@ void main() {
         // Assert
         expect(result,
             const Left(Failure(errorType: ErrorType.notAuthorisedError)));
-        verify(mockRemoteDataSource
-            .get5DaysWeather(testParams.toRequestParams()));
+        verify(
+            mockRemoteDataSource.get5DaysWeather(testParams.toRequestParams()));
         verifyNoMoreInteractions(mockRemoteDataSource);
       });
     });

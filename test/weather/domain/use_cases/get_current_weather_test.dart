@@ -10,10 +10,9 @@ import 'package:weather_app/features/home/domain/use_cases/get_current_weather.d
 import 'get_current_weather_test.mocks.dart';
 
 @GenerateMocks([WeatherRepository])
-
 void main() {
   late GetCurrentWeather useCase;
-    late MockWeatherRepository mockWeatherRepository;
+  late MockWeatherRepository mockWeatherRepository;
 
   setUp(() {
     mockWeatherRepository = MockWeatherRepository();
@@ -22,15 +21,18 @@ void main() {
 
   final testParams = GetWeatherParams(lon: -73.933783, lat: 40.659569);
   final testWeather = Weather(
-      status: 'Rain',
-      description: "light rain",
-      temp: 296.51,
-      tempMin: 296.51,
-      tempMax: 297.04,
-      feelsLike: 297.2,
-      pressure: 1009,
-      humidity: 88,
-      windSpeed: 3.98);
+    status: 'Rain',
+    description: "light rain",
+    temp: 296.51,
+    tempMin: 296.51,
+    tempMax: 297.04,
+    feelsLike: 297.2,
+    pressure: 1009,
+    humidity: 88,
+    windSpeed: 3.98,
+    dateTime: DateTime.now(),
+    cityName: 'Aleppo',
+  );
 
   test('should get current weather for specific location from the repository',
       () async {

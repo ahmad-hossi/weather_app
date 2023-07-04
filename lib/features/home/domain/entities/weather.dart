@@ -1,13 +1,15 @@
 class Weather {
-  String status;
-  String description;
-  double temp;
-  double tempMin;
-  double tempMax;
-  double feelsLike;
-  double pressure;
-  double humidity;
-  double windSpeed;
+  final String status;
+  final String description;
+  final double temp;
+  final double tempMin;
+  final double tempMax;
+  final double feelsLike;
+  final double pressure;
+  final double humidity;
+  final double windSpeed;
+  final DateTime dateTime;
+  final String cityName;
 
   Weather({
     required this.status,
@@ -19,5 +21,7 @@ class Weather {
     required this.pressure,
     required this.humidity,
     required this.windSpeed,
+    required this.dateTime,
+    required this.cityName,
   });
 }

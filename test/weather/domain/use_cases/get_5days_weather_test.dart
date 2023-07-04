@@ -18,16 +18,17 @@ void main() {
   final testParams = GetWeatherParams(lon: -73.933783, lat: 40.659569);
   final testWeatherList = [
     Weather(
-      status: 'Rain',
-      description: "light rain",
-      temp: 296.51,
-      tempMin: 296.51,
-      tempMax: 297.04,
-      feelsLike: 297.2,
-      pressure: 1009,
-      humidity: 88,
-      windSpeed: 3.98,
-    ),
+        status: 'Rain',
+        description: "light rain",
+        temp: 296.51,
+        tempMin: 296.51,
+        tempMax: 297.04,
+        feelsLike: 297.2,
+        pressure: 1009,
+        humidity: 88,
+        windSpeed: 3.98,
+        cityName: 'Aleppo',
+        dateTime: DateTime.now()),
     Weather(
       status: 'Clear',
       description: "clear sky",
@@ -38,22 +39,24 @@ void main() {
       pressure: 1008,
       humidity: 67,
       windSpeed: 2.36,
+      dateTime: DateTime.now(),
+      cityName: 'Aleppo',
     ),
   ];
 
-  test('should get 5 days forecast weather for specific location from the repository',
-          () async {
-        //Arrange
-        when(mockWeatherRepository.get5DaysWeather(testParams.toRequestParams()))
-            .thenAnswer((_) async => Right(testWeatherList));
+  test(
+      'should get 5 days forecast weather for specific location from the repository',
+      () async {
+    //Arrange
+    when(mockWeatherRepository.get5DaysWeather(testParams.toRequestParams()))
+        .thenAnswer((_) async => Right(testWeatherList));
 
-        // Act
-        final result = await useCase(testParams);
+    // Act
+    final result = await useCase(testParams);
 
-        //Assert
-        expect(result, Right(testWeatherList));
-        verify(
-            mockWeatherRepository.get5DaysWeather(testParams.toRequestParams()));
-        verifyNoMoreInteractions(mockWeatherRepository);
-      });
+    //Assert
+    expect(result, Right(testWeatherList));
+    verify(mockWeatherRepository.get5DaysWeather(testParams.toRequestParams()));
+    verifyNoMoreInteractions(mockWeatherRepository);
+  });
 }

@@ -1,6 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:weather_app/core/utils/show_toast.dart';
+import 'package:weather_app/features/home/domain/use_cases/get_5days_weather.dart';
 import 'package:weather_app/features/home/presentation/bloc/city_bloc/city_bloc.dart';
+import 'package:weather_app/features/home/presentation/bloc/forcast_bloc/forecast_bloc.dart';
+import 'package:weather_app/features/home/presentation/bloc/weather_bloc/weather_bloc.dart';
+
+import '../../domain/entities/location_entity.dart';
 
 class CityPage extends StatelessWidget {
   const CityPage({Key? key}) : super(key: key);
@@ -32,12 +38,18 @@ class CityPage extends StatelessWidget {
                   ),
                 ),
               ),
-              Expanded(child: BlocBuilder<CityBloc, CityState>(
+              Expanded(
+                  child: BlocConsumer<CityBloc, CityState>(
+                listener: (_, state) {
+                  if (state is CityLocationDetermineFailed) {
+                    showToastMessage(state.errorMessage);
+                  }
+                },
                 builder: (context, state) {
                   if (state is CityInitial) {
-                    return const Center(child: Text('Enter a Location name'));
+                    return const Center(child: Text('Enter a city name'));
                   } else if (state is CityLoading) {
-                    return const Center(child: Text('Loading'));
+                    return const Center(child: CircularProgressIndicator());
                   } else if (state is CityLocationDeterminedSuccessfully) {
                     return Container(
                       width: double.infinity,
@@ -46,17 +58,10 @@ class CityPage extends StatelessWidget {
                       decoration: BoxDecoration(
                           color: Colors.white,
                           borderRadius: BorderRadius.circular(20)),
-                      child: SearchResult(
-                          cityName: state.cityLocation.cityName,
-                          state: state.cityLocation.state,
-                          country: state.cityLocation.country),
+                      child: SearchResult(cityData: state.cityData),
                     );
-
-                    Center(
-                        child: Text(
-                            '${state.cityLocation.cityName},${state.cityLocation.country}'));
                   } else {
-                    return const Center(child: Text('Failed'));
+                    return const SizedBox.shrink();
                   }
                 },
               ))
@@ -69,29 +74,30 @@ class CityPage extends StatelessWidget {
 }
 
 class SearchResult extends StatelessWidget {
-  const SearchResult({
-    super.key,
-    required this.cityName,
-    required this.country,
-    required this.state,
-  });
-  final String cityName;
-  final String country;
-  final String state;
+  const SearchResult({super.key, required this.cityData});
+  final LocationEntity cityData;
 
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: (){},
+      onTap: () {
+        context
+            .read<WeatherBloc>()
+            .add(GetCurrentWeatherEvent(lon: cityData.lon, lat: cityData.lat));
+        context.read<ForecastBloc>().add(GetWeatherForecast(
+              lat: cityData.lat,
+              lon: cityData.lon,
+            ));
+      },
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            cityName,
+            cityData.cityName,
             style: const TextStyle(fontSize: 24),
           ),
           Text(
-            '$state , $country',
+            '${cityData.state ?? ''} , ${cityData.country}',
             style: const TextStyle(color: Colors.grey),
           ),
           const Divider(

@@ -20,6 +20,8 @@ void main() {
       pressure: 1009,
       humidity: 88,
       windSpeed: 3.98,
+      dateTime: DateTime.now(),
+      cityName: 'Aleppo',
     );
 
     expect(weatherModel.status, equals('Rain'));

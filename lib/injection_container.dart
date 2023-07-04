@@ -12,7 +12,9 @@ import 'package:weather_app/features/home/presentation/bloc/weather_bloc/weather
 import 'core/network/network_info.dart';
 import 'core/services/location_service.dart';
 import 'features/home/data/repositories/weather_repository_impl.dart';
+import 'features/home/domain/use_cases/get_5days_weather.dart';
 import 'features/home/presentation/bloc/city_bloc/city_bloc.dart';
+import 'features/home/presentation/bloc/forcast_bloc/forecast_bloc.dart';
 
 
 final sl = GetIt.I;
@@ -22,12 +24,14 @@ Future<void> init() async {
   // Bloc
   sl.registerFactory(() => LocationBloc(sl()));
   sl.registerFactory(() => WeatherBloc(sl()));
+  sl.registerFactory(() => ForecastBloc(sl()));
   sl.registerFactory(() => CityBloc(sl()));
 
 
 
   // Use cases
   sl.registerLazySingleton(() => GetCurrentWeather(sl()));
+  sl.registerLazySingleton(() => Get5DaysWeather(sl()));
   sl.registerLazySingleton(() => GetCityLocation(sl()));
 
 
