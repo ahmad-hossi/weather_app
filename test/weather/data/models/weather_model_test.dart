@@ -10,20 +10,6 @@ void main() {
     final weatherModel =
         WeatherModel.fromJson(json.decode(fixture('weather.json')));
 
-    WeatherModel(
-      status: 'Rain',
-      description: 'light rain',
-      temp: 296.51,
-      tempMin: 296.51,
-      tempMax: 297.04,
-      feelsLike: 297.2,
-      pressure: 1009,
-      humidity: 88,
-      windSpeed: 3.98,
-      dateTime: DateTime.now(),
-      cityName: 'Aleppo',
-    );
-
     expect(weatherModel.status, equals('Rain'));
     expect(weatherModel.description, equals('light rain'));
     expect(weatherModel.temp, equals(296.51));
